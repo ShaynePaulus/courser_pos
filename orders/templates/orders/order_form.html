@@ -3,6 +3,106 @@
 
 {% block content %}
 <h1>New Order: {{ customer }}</h1>
-{% crispy form %}
+    {% for field in form %}
+        {% if field.errors %}
+            <p class="alert alert-danger">{{ field.label }}: {{ field.errors|striptags }}</p>
+        {% endif %}
+    {% endfor %}
+<form action="" method="POST">
+    {% csrf_token %}
+    <fieldset class="mt-5">
+        <legend><strong>Deer Info</strong></legend>
+            {{ form.tag_number|as_crispy_field }}
+        <div class='form-row'>
+            <div class='col-sm'>{{ form.gender|as_crispy_field }}</div>
+            <div class='col-sm'>{{ form.points|as_crispy_field }}</div>
+            <div class='col-sm'>{{ form.mount|as_crispy_field }}</div>
+            <div class='col-sm'>{{ form.hide|as_crispy_field }}</div>
+        </div>
+    </fieldset>
+    <fieldset class="mt-5">
+        <legend><strong>Cut Options</strong></legend>
+        <h4 class="text-center"><em>Steaks</em></h4>
+        <p class="text-center mb-5"> Description and Notes </p>
+        <div class='form-row'>
+            <div class='col-sm'>{{ form.tender_loins|as_crispy_field }}</div>
+            <div class='col-sm'>{{ form.loins|as_crispy_field }}</div>
+        </div>
+        <div class='form-row'>
+            <div class='col-sm'>{{ form.rounds|as_crispy_field }}</div>
+            <div class='col-sm'>{{ form.tips|as_crispy_field }}</div>
+        </div>
+        <h4 class="text-center"><em>Roasts & Burger</em></h4>
+        <div class='form-row'>
+            <div class='col-sm'>{{ form.shoulder_roast|as_crispy_field }}</div>
+            <div class='col-sm'>{{ form.neck_roast|as_crispy_field }}</div>
+        </div>
+        <div class='form-row'>
+            <div class='col-sm'>{{ form.burger|as_crispy_field }}</div>
+            <div class='col-sm'></div>
+        </div>
+    </fieldset>
+    <fieldset class="mt-5">
+        <legend><strong>Smoked Meats</strong></legend>
+        <h4 class="text-center"><em>Summer Sausages</em></h4>
+        <p class="text-center mb-5"> Description and Notes </p>
+        <div class='form-row'>
+            <div class='col-sm'>{{ form.original_summer_sausage|as_crispy_field }}</div>
+            <div class='col-sm'>{{ form.cheese_summer_sausage|as_crispy_field }}</div>
+            <div class='col-sm'>{{ form.jalapeno_summer_sausage|as_crispy_field }}</div>
+            <div class='col-sm'>{{ form.hickory_stick|as_crispy_field }}</div>
+        </div>
+        <h4 class="text-center"><em>Pepper Sticks</em></h4>
+        <p class="text-center mb-5"> Description and Notes </p>
+        <div class='form-row'>
+            <div class='col-sm'>{{ form.original_pepper_sticks|as_crispy_field }}</div>
+            <div class='col-sm'>{{ form.jalapeno_cheese_pepper_sticks|as_crispy_field }}</div>
+            <div class='col-sm'>{{ form.hunter_twiggs|as_crispy_field }}</div>
+            <div class='col-sm'>{{ form.honey_bbq_pepper_sticks|as_crispy_field }}</div>
+        </div>
+        <h4 class="text-center"><em>Ham & Jerky</em></h4>
+        <p class="text-center mb-5"> Description and Notes </p>
+        <div class='form-row'>
+            <div class='col-sm'>{{ form.smoked_ham|as_crispy_field }}</div>
+            <div class='col-sm'>{{ form.jerky|as_crispy_field }}</div>
+            <div class='col-sm'>{{ form.jerky_sweet_and_spicy|as_crispy_field }}</div>
+            <div class='col-sm'></div>
+        </div>
+        <h4 class="text-center"><em>Smoked Brats</em></h4>
+        <p class="text-center mb-5"> Description and Notes </p>
+        <div class='form-row'>
+            <div class='col-sm'>{{ form.smoked_brats|as_crispy_field }}</div>
+            <div class='col-sm'>{{ form.jalapeno_smoked_brats|as_crispy_field }}</div>
+            <div class='col-sm'></div>
+            <div class='col-sm'></div>
+        </div>
+    </fieldset class="mt-5">
+    <fieldset>
+        <legend><strong>House Bulk Sausage</strong></legend>
+        <div class='form-row'>
+            <div class='col-sm'>{{ form.maple_breakfast|as_crispy_field }}</div>
+            <div class='col-sm'>{{ form.spicy_breakfast|as_crispy_field }}</div>
+            <div class='col-sm'>{{ form.italian|as_crispy_field }}</div>
+            <div class='col-sm'></div>
+        </div>
+    </fieldset>
+    <fieldset class="mt-5">
+        <legend><strong>Packaging & Payment</strong></legend>
+        <div class='form-row'>
+            <div class='col-sm'>{{ form.package_size|as_crispy_field }}</div>
+        </div>
+        <div class='form-row'>
+            <div class='col-sm'>{{ form.notes|as_crispy_field }}</div>
+        </div>
+        <div class='form-row'>
+            <div class='col-sm mt-2'>{{ form.process_paid|as_crispy_field }}</div>
+            <div class='col-sm mt-2'>{{ form.sausage_paid|as_crispy_field }}</div>
+            <div class='col-sm'>{{ form.payment_style|as_crispy_field }}</div>
+        </div>
+    </fieldset class="mt-5">
+    <div class="my-5 float-right">
+        <input class="btn btn-primary" type="submit" value="Submit">
+        <input class="btn btn-primary" type="submit" onclick="window.location='{% url 'orders:customer_view' customer.id %}' ; return false;" value="Cancel">
+    </div>
 </form>
 {% endblock %}

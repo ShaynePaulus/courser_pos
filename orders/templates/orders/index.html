@@ -3,7 +3,7 @@
 {% block content %}
     <h1>Orders</h1>
     <div>
-        <a href="{% url 'orders:customer_search' %}"><button class="btn btn-primary margin10" type="button">New order</button></a>
+        <a href="{% url 'orders:customer' %}"><button class="btn btn-primary margin10" type="button">New order</button></a>
     </div>
     {% if order_list %}
         <table class="table table-striped">

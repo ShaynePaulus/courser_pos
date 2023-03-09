@@ -1,3 +1,6 @@
+import csv
+from datetime import date
+
 from django.shortcuts import render, redirect, get_list_or_404, get_object_or_404
 from django.views import View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -6,10 +9,9 @@ from django.urls import reverse_lazy, reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 
-
 import phonenumbers
 
-from .models import Customer, Order
+from orders.models import Customer, Order
 from orders.forms import CustomerForm, OrderForm
 
 class Index(LoginRequiredMixin, View):
@@ -18,7 +20,7 @@ class Index(LoginRequiredMixin, View):
         contex = {'order_list':orders}
         return render(request, 'orders/index.html', contex)
 
-class CustomerSearch(LoginRequiredMixin, View):
+class CustomerLookup(LoginRequiredMixin, View):
     def get(self, request):
         form = CustomerForm()
         ctx = {'form': form}
@@ -37,7 +39,6 @@ class CustomerSearch(LoginRequiredMixin, View):
         #currently assuming customers have unique phone numbers
         try:            
             customer = Customer.objects.get(phone=customer.phone)
-            print('customer not found')
             return redirect(reverse('orders:customer_view', args=[customer.id]))
         
         except Customer.DoesNotExist:
@@ -48,7 +49,7 @@ class CustomerSearch(LoginRequiredMixin, View):
 class CustomerView(LoginRequiredMixin, View):
     def get(self, request, pk):
         customer = get_object_or_404(Customer, pk=pk)
-        previous_orders = list(Order.objects.filter(customer=customer.id))
+        previous_orders = list(Order.objects.filter(customer=customer.id).order_by('-id'))
         ctx = {'previous_orders': previous_orders, 'customer': customer}
         return render(request, 'orders/customer.html', ctx)
 
@@ -63,9 +64,7 @@ class CustomerEdit(LoginRequiredMixin, View):
         customer = get_object_or_404(Customer, pk=pk)
         form = CustomerForm(request.POST, instance=customer)
         if not form.is_valid():
-            errors = form.errors
-            print(errors)
-            ctx = {'form': form, 'error': errors}
+            ctx = {'form': form}
             return render(request, 'orders/customer_form.html', ctx)
         #Normalize form data
         customer = form.save(commit=False)
@@ -78,7 +77,12 @@ class CustomerEdit(LoginRequiredMixin, View):
 class NewOrder(LoginRequiredMixin, View):
     def get(self, request, pk):
         customer = Customer.objects.get(pk=pk)
-        form = OrderForm()
+        try:            
+            order = Order.objects.filter(customer=customer.id)[:1]
+            order = order[0]
+            form = OrderForm(instance=order)       
+        except:
+            form = OrderForm()
         ctx = {'form': form, 'customer':customer}
         return render(request, 'orders/order_form.html', ctx)
     
@@ -86,8 +90,7 @@ class NewOrder(LoginRequiredMixin, View):
         customer = Customer.objects.get(pk=pk)
         form = OrderForm(request.POST)
         if not form.is_valid():
-            errors = form.errors
-            ctx = {'form': form, 'error': errors, 'customer':customer}
+            ctx = {'form': form, 'customer':customer}
             return render(request, 'orders/order_form.html', ctx)
         order = form.save(commit=False)
         order.customer = customer
@@ -103,19 +106,33 @@ class ViewOrder(LoginRequiredMixin, View):
 class EditOrder(LoginRequiredMixin, View):
     def get(self, request, pk):
         order = get_object_or_404(Order, pk=pk)
+        customer = order.customer
         form = OrderForm(instance=order)
-        contex = {'form': form}
+        contex = {'form': form, 'order': order, 'customer': customer}
         return render(request, 'orders/order_form.html', contex)
         
     def post(self, request, pk):
         order = get_object_or_404(Order, pk=pk)
+        customer = order.customer
         form = OrderForm(request.POST, instance=order)
-        if not form.is_valid():
-            errors = form.errors
-            ctx = {'form': form, 'error': errors}
+        if not form.is_valid(): 
+            ctx = {'form': form, 'order': order}
             return render(request, 'orders/order_form.html', ctx)
+        order.customer = customer
         form.save()
         return redirect(reverse_lazy('orders:index'))
+
+class ProcessOrder(LoginRequiredMixin, View):
+    def get(self, request, pk):
+        return HttpResponse('Make this view')
+    def post(self, request, pk):
+        return HttpResponse('Make this view')
+
+class CheckoutOrder(LoginRequiredMixin, View):
+    def get(self, request, pk):
+        return HttpResponse('Make this view')
+    def post(self, request, pk):
+        return HttpResponse('Make this view')
 
 class Search(LoginRequiredMixin, View):
     def get(self, request):
@@ -157,3 +174,23 @@ class Search(LoginRequiredMixin, View):
         
         return HttpResponse(f'No entries matching "{search}"')
 
+class Sausage(LoginRequiredMixin, View):
+    def get(self, request):
+        return HttpResponse('Working on this')
+
+def ExportCsv(request):
+    response = HttpResponse()
+    today = date.today()
+    response['Content-Disposition'] = (f'attachment; filename={today}-orders.csv')
+    writer = csv.writer(response)
+    writer.writerow(['Order ID', 'First', 'Last',
+                        'Customer ID', 'Payment_style'])
+    order_fields = Order.objects.all().values_list('id', 'customer', 'payment_style')
+    for order in order_fields:
+        first = getattr(Customer.objects.get(pk=order[1]), 'first')
+        last = getattr(Customer.objects.get(pk=order[1]), 'last')
+        order = list(order)
+        order.insert(1, first)
+        order.insert(2, last)
+        writer.writerow(order)
+    return response
