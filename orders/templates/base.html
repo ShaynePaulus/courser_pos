@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -18,8 +18,8 @@
 
     {% block title %}{{ settings.APP_NAME }}{% endblock %}
     {% block head %} {% endblock %}   
-  </head>
-  <body>
+</head>
+<header>
     <div class="nav-div">
       <div class="container">     
         <div class="search-nav">
@@ -41,10 +41,14 @@
         </nav>
       </div>
     </div>
-    <div class="container">
     {% block navbar %} {% endblock %}
-    {% block content %}{% endblock %}
-    </div>
+</header>
+<body>
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>       
+</body>
+<footer>
     {% block footer %} {% endblock %}
-  </body>
+</footer>
 </html>

@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+
+{% block navbar %}
+<div style="margin-bottom: 20px;"></div>
+<div class="d-flex container">
+    <div class="mr-auto p-2"></div>
+    <div class="p-2"><a href="{% url 'orders:edit_order' order.id %}"><button class="btn btn-primary" type="button">Edit Order</button></a></div>
+    <div class="p-2"><a href="{% url 'orders:process_order' order.id %}"><button class="btn btn-primary" type="button">Process Order</button></a></div>
+    <div class="p-2"><a href="{% url 'orders:checkout_order' order.id %}"><button class="btn btn-primary" type="button">Check-Out Order</button></a></div>
+    <div class="p-2"><a onclick="window.print();"><button class="btn btn-primary" type="button">Print Order</button></a></div>
+  </div>
+{% endblock %}
+     
+{% block content %}
+<div>
+</div>
+    {% if order %}
+    <div style="margin: 20px 0 20px 0;"><h1 class="text-center">
+        {% if form %}Process:{% endif %} 
+        {% if outform %}Checkout:{% endif %} 
+        Order# {{ order.id }}</h1>
+    </div>
+    
+    <div class="row">
+        <p class="col-sm h3">{{order.customer.first}} {{order.customer.last }}</p>
+        <p class="col-sm h3 text-right">{{order.tag_number}} </p>
+        <p class="col-sm"></p>
+        <p class="col-sm h3 text-left">{{order.gender}}{% if order.points %} / {{order.points}} {% endif %}<br>
+            {% if order.mount %} Mount: {{order.mount}} {% endif %}<br>
+            {% if order.hide %} Hide: {{order.hide}} {% endif %}</p>
+        <p class="col-sm h3 text-right">{{order.checkin_date}}<br>{{order.checkin_time}} </p>
+    </div>
+    {% if order.checkout_date or order.sausage_date %}
+        <div class="row">
+            <div class="col-sm">
+                <p class="h3">Order Picked Up:</p>
+            </div>
+            <div class="col-sm">
+                <p class="h3">{{order.sausage_date}}</p>
+            </div>
+            {% if order.sausage_date %}
+            <div class="col-sm">
+                <p class="h3">Sausage Picked Up:</p>
+            </div>
+            <div class="col-sm">
+                <p class="h3 text-right">{{order.sausage_date}}</p>
+            </div>
+            {% endif %}
+        
+        </div>
+    {% endif %}
+    
+    <h2 class="text-center mt-5">Cut Info</h2><hr>
+    <div class="row">
+        <p class="col-sm h3">Tenders: <span class="font-weight-bold">{{order.tender_loins}}</span></p>
+        <p class="col-sm h3">Loins: <span class="font-weight-bold">{{order.loins}}</span></p>
+        <p class="col-sm h3">Rounds: <span class="font-weight-bold">{{order.rounds}}</span></p>
+        <p class="col-sm h3">Tips: <span class="font-weight-bold">{{order.tips}}</span></p>
+    </div>
+
+    <div class="row">
+        <p class="col-sm h3">Burger: <span class="font-weight-bold">{{order.burger}}</span></p>
+        <p class="col-sm h3">Neck Roast: <span class="font-weight-bold">{% if order.neck_roast %} {{order.neck_roast}} {% endif %}</span></p>
+        <p class="col-sm h3">Shoulder Roast: <span class="font-weight-bold">{% if order.shoulder_roast %} {{order.shoulder_roast}} {% endif %}</span></p>
+        <p class="col-sm h3">Package: <span class="font-weight-bold">{{order.package_size}}</span></p>
+    </div>
+
+    <h2 class="text-center mt-5">Sausage Order</h2><hr>
+    <div class="row">
+        <p class="col-sm h3">Smoked Lbs: <span class="font-weight-bold">{% if order.smoked_lbs %}{{order.smoked_lbs}} {% endif %}</span></p>
+        <p class="col-sm h3">Jerky Lbs: <span class="font-weight-bold">{% if order.jerky_lbs %}{{order.jerky_lbs}}  {% endif %}</span></p>
+        <p class="col-sm h3">Ham: <span class="font-weight-bold">{% if order.smoked_ham %}{{order.smoked_ham}}  {% endif %}</span></p>
+        <p class="col-sm h3">Bulk Lbs: <span class="font-weight-bold">{% if order.bulk_lbs %}{{order.bulk_lbs}}  {% endif %}</span></p>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+            {% if order.smoked_lbs %}
+            <h4>Sausage Out: {{order.sausage_out}}</h4>
+                <ul>
+                    {% if order.original_summer_sausage %}<li> Original Summer Sausage: {{order.original_summer_sausage}} </li> {% endif %}
+                    {% if order.cheese_summer_sausage %}<li> Cheese Summer Sausage: {{order.cheese_summer_sausage}} </li> {% endif %}
+                    {% if order.jalapeno_summer_sausage %}<li> Jalapeno Summer Sausage: {{order.jalapeno_summer_sausage}} </li> {% endif %}
+                    {% if order.hickory_stick %}<li> Hickory Sticks: {{order.hickory_stick}} </li> {% endif %}
+                    {% if order.original_pepper_sticks %}<li> Pepper Sticks: {{order.original_pepper_sticks}} </li> {% endif %}
+                    {% if order.jalapeno_cheese_pepper_sticks %}<li> Jalapeno Cheese Pepper Sticks: {{order.jalapeno_cheese_pepper_sticks}} </li> {% endif %}
+                    {% if order.hunter_twiggs %}<li> Hunter Twiggs: {{order.hunter_twiggs}} </li> {% endif %}
+                    {% if order.honey_bbq_pepper_sticks %}<li> BBQ Pepper Sticks: {{order.honey_bbq_pepper_sticks}} </li> {% endif %}
+                    {% if order.smoked_brats %}<li> Brats: {{order.smoked_brats}} </li> {% endif %}
+                    {% if order.jalapeno_smoked_brats %}<li> Jalapeno Brats: {{order.jalapeno_smoked_brats}} </li> {% endif %}
+                </ul>
+            {% endif %}
+        </div>
+        <div class="col-sm">
+            {% if order.jerky_lbs %}
+            <h4>Jerky Out: {{order.jerky_out}}</h4>
+                <ul>
+                    {% if order.jerky %}<li> Jerky: {{order.jerky}} </li> {% endif %}
+                    {% if order.jerky_sweet_and_spicy %}<li> Jerky Sweet & Spicy: {{order.jerky_sweet_and_spicy}} </li> {% endif %}                
+                </ul>
+            {% endif %}
+        </div>
+        <div class="col-sm">
+            {% if order.smoked_ham %}
+            <h4>Ham Out: {{order.ham_out}}</h4>
+                <ul>
+                    {% if order.smoked_ham %}<li> Smoked Ham: {{order.smoked_ham}}</li> {% endif %}
+                </ul>
+            {% endif %}    
+        </div>
+        <div class="col-sm">
+            {% if order.bulk_lbs %}
+            <h4>Bulk Out: {{order.bulk_out}}</h4>
+                <ul>
+                    {% if order.maple_breakfast %}<li> Maple Breakfast: {{order.maple_breakfast}}</li> {% endif %}
+                    {% if order.spicy_breakfast %}<li> Spicy Breakfast: {{order.spicy_breakfast}}</li> {% endif %}
+                    {% if order.italian %}<li> Italian: {{order.italian}}</li> {% endif %}
+                </ul>
+            {% endif %}
+        </div>   
+    </div>
+    <h2 class="text-center mt-5">Order Details</h2><hr>
+    <div class="row">
+        <div class="col-sm">
+            <p class="h3">Process Date: <span class="font-weight-bold">{% if order.process_date %}{{order.process_date}} {% endif %}</span></p>
+            <p class="h3">Contact Date: <span class="font-weight-bold">{% if order.contact_date %}{{order.contact_date}} {% endif %}</span></p>
+        </div>
+        <div class="col-sm">
+            <p class="h3">Freezer #: <span class="font-weight-bold">{% if order.freezer %}{{order.freezer}} {% endif %}</span></p>
+            <p class="h3">Bag #: <span class="font-weight-bold">{% if order.bag %}{{order.bag}} {% endif %}</span></p>
+        </div>
+        <div class="col-sm">
+            <p class="h3">Process Paid: <span class="font-weight-bold">{% if order.process_paid %}{{order.process_paid}} {% endif %}</span></p>
+            <p class="h3">Sausage Paid: <span class="font-weight-bold">{% if order.sausage_paid %}{{order.sausage_paid}} {% endif %}</span></p>    
+        </div>  
+        <div class="col-sm">
+            <p class="h3">Process Cost: <span class="float-right font-weight-bold">&nbsp;${{order.process_cost|floatformat:2}}</span></p>
+            <p class="h3">Sausage Cost: <span class="float-right font-weight-bold">{% if order.sausage_cost %}${{order.sausage_cost|floatformat:2}} {% endif %}</span></p>
+            {% if order.hide_cost %}<p class="h3">Hide Cost: <span class="float-right font-weight-bold">${{order.hide_cost|floatformat:2}} {% endif %}</span></p>
+        </div>  
+    </div>
+    <br>
+    <div class="row">    
+        <p class="col-sm h3"></p>
+        <p class="col-sm h3"></p>
+        <p class="col-sm h3">Payment: <span class="font-weight-bold">{% if order.payment_style %}{{order.payment_style}} {% endif %}</span></p>
+        <p class="col-sm h3">Total Cost: <span class="float-right font-weight-bold">${{order.total_cost|floatformat:2}}</span></p>        
+    </div>
+    
+    {% else %}
+        <p>There are no orders with that order id</p>
+    {% endif %}
+
+{% endblock %}
+
+{% block footer %}
+<div class="container">
+    {% if form %}
+        {% include "orders/process_form.html" %}
+    {% endif %} 
+    {% if outform %}
+        {% include "orders/checkout_form.html" %}
+    {% endif %}    
+</div> 
+{% endblock %}

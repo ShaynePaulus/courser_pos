@@ -1,0 +1,30 @@
+
+{% load crispy_forms_tags %}
+{% block content %}
+    {% if order %}
+    <h2 class="text-center mt-5">Proccessing Info</h2><hr>
+        <form action="" method="POST"> 
+            {% csrf_token %}
+            {{ form.errors }}
+            <div class="row">
+                {% if order.smoked_lbs %}<div class='col-sm mt-2'>{{ form.sausage_out|as_crispy_field }}</div>{% endif %}
+                {% if order.jerky_lbs %}<div class='col-sm mt-2'>{{ form.jerky_out|as_crispy_field }}</div>{% endif %}
+                {% if order.smoked_ham %}<div class='col-sm mt-2'>{{ form.ham_out|as_crispy_field }}</div>{% endif %}
+                {% if order.bulk_lbs %}<div class='col-sm mt-2'>{{ form.bulk_out|as_crispy_field }}</div>{% endif %}
+            </div>
+            <div class="row">
+                <div class='col-sm mt-2'></div>
+                <div class='col-sm mt-2'></div>  
+                <div class='col-sm mt-2'>{{ form.bag|as_crispy_field }}</div>
+                <div class='col-sm mt-2'>{{ form.freezer|as_crispy_field }}</div>
+            </div>
+            <div class="my-5 float-right">
+                <input class="btn btn-primary" type="submit" value="Submit">
+                <input class="btn btn-primary" type="submit" onclick="window.location='{% url 'orders:view_order' order.id %}' ; return false;" value="Cancel">
+            </div>
+            
+        </form>
+    {% else %}
+        <p>There are no orders with that order id</p>
+    {% endif %}
+{% endblock %}

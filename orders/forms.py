@@ -22,6 +22,23 @@ class OrderForm(ModelForm):
     class Meta:
         model = Order
         fields = '__all__'
+        exclude = 'freezer', 'bag',
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+
+class OrderProcess(ModelForm):
+    class Meta:
+        model = Order
+        fields = 'sausage_out', 'bulk_out', 'ham_out', 'jerky_out', 'freezer', 'bag'
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+
+class OrderCheckout(ModelForm):
+    class Meta:
+        model = Order
+        fields = 'process_paid', 'sausage_paid', 'payment_style', 'order_gone', 'sausage_gone'
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()

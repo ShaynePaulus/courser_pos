@@ -11,6 +11,9 @@ urlpatterns = [
     path('customer/<pk>/new_order', views.NewOrder.as_view(), name='new_order'),
     path('order/<pk>/', views.ViewOrder.as_view(), name='view_order'),
     path('order/<pk>/edit', views.EditOrder.as_view(), name='edit_order'),
+    path('order/<pk>/process', views.ProcessOrder.as_view(), name='process_order'),
+    path('order/<pk>/checkout', views.CheckoutOrder.as_view(), name='checkout_order'),
+
     path('search/', views.Search.as_view(), name='search'),
     path('sausage/', views.Sausage.as_view(), name='sausage'),
     path('export/', views.ExportCsv, name='export_csv'),
