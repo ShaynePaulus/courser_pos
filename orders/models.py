@@ -24,10 +24,10 @@ class Order(models.Model):
     BULK_CHOICES = [('3', '3 lbs'), ('6', '6 lbs'), ('9', '9 lbs'), ('All', 'All')]
     
     #process info
-    sausage_out = models.BooleanField(default=True, blank=True)
-    bulk_out = models.BooleanField(default=True, blank=True)
-    ham_out = models.BooleanField(default=True, blank=True)
-    jerky_out = models.BooleanField(default=True, blank=True)
+    sausage_out = models.BooleanField(blank=True, null=True)
+    bulk_out = models.BooleanField(blank=True, null=True)
+    ham_out = models.BooleanField(blank=True, null=True)
+    jerky_out = models.BooleanField(blank=True, null=True)
 
     freezer = models.IntegerField(null=True)
     bag = models.IntegerField(null=True)

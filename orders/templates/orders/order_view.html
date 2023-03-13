@@ -1,16 +1,22 @@
 {% extends "base.html" %}
-
 {% block navbar %}
-<div style="margin-bottom: 20px;"></div>
-<div class="d-flex container">
-    <div class="mr-auto p-2"></div>
-    <div class="p-2"><a href="{% url 'orders:edit_order' order.id %}"><button class="btn btn-primary" type="button">Edit Order</button></a></div>
-    <div class="p-2"><a href="{% url 'orders:process_order' order.id %}"><button class="btn btn-primary" type="button">Process Order</button></a></div>
-    <div class="p-2"><a href="{% url 'orders:checkout_order' order.id %}"><button class="btn btn-primary" type="button">Check-Out Order</button></a></div>
-    <div class="p-2"><a onclick="window.print();"><button class="btn btn-primary" type="button">Print Order</button></a></div>
+<div class="container">
+<div style="margin: 20px 0 20px 0;" class="button-group-right button-group">
+        <div class="buttons "><a href="{% url 'orders:edit_order' order.id %}"><button class="btn btn-primary" type="button">Edit Order</button></a></div>
+        <div class="buttons "><a href="{% url 'orders:process_order' order.id %}"><button class="btn btn-primary" type="button">Process Order</button></a></div>
+        <div class="buttons "><a href="{% url 'orders:checkout_order' order.id %}"><button class="btn btn-primary" type="button">Check-Out Order</button></a></div>
+        <div class="buttons "><a onclick="window.print();"><button class="btn btn-primary" type="button">Print Order</button></a></div>
   </div>
-{% endblock %}
-     
+</div>
+<div class="container">
+    {% if form %}
+        {% include "orders/process_form.html" %}
+    {% endif %} 
+    {% if outform %}
+        {% include "orders/checkout_form.html" %}
+    {% endif %}    
+</div> 
+{% endblock %}   
 {% block content %}
 <div>
 </div>
@@ -22,13 +28,25 @@
     </div>
     
     <div class="row">
-        <p class="col-sm h3">{{order.customer.first}} {{order.customer.last }}</p>
-        <p class="col-sm h3 text-right">{{order.tag_number}} </p>
-        <p class="col-sm"></p>
-        <p class="col-sm h3 text-left">{{order.gender}}{% if order.points %} / {{order.points}} {% endif %}<br>
-            {% if order.mount %} Mount: {{order.mount}} {% endif %}<br>
-            {% if order.hide %} Hide: {{order.hide}} {% endif %}</p>
-        <p class="col-sm h3 text-right">{{order.checkin_date}}<br>{{order.checkin_time}} </p>
+        <div class="col-lg-3 col-sm-3">
+            <p class="h3">{{order.customer.first}} {{order.customer.last }}</p>
+            <p class="h3">{{order.customer.phone}}</p>
+
+        </div>
+        <div class="text-center col-lg-3 col-sm-3">
+            <p class="h3 ">{{order.checkin_date}} <!--{{order.checkin_time}}--> </p>
+        </div>
+        <div class="text-center col-lg-4 col-sm-3">
+            <p class="h3 ">Tag #: {{order.tag_number}} </p>
+        </div>
+        
+        <div class="col-lg-2 col-sm-3">
+            <p class="h3 ">{{order.gender}}{% if order.points %} / {{order.points}} {% endif %}<br>
+                {% if order.mount %} Mount: {{order.mount}} {% endif %}<br>
+                {% if order.hide %} Hide: {{order.hide}} {% endif %}</p>
+        </div>
+        
+        
     </div>
     {% if order.checkout_date or order.sausage_date %}
         <div class="row">
@@ -82,7 +100,7 @@
                     {% if order.jalapeno_summer_sausage %}<li> Jalapeno Summer Sausage: {{order.jalapeno_summer_sausage}} </li> {% endif %}
                     {% if order.hickory_stick %}<li> Hickory Sticks: {{order.hickory_stick}} </li> {% endif %}
                     {% if order.original_pepper_sticks %}<li> Pepper Sticks: {{order.original_pepper_sticks}} </li> {% endif %}
-                    {% if order.jalapeno_cheese_pepper_sticks %}<li> Jalapeno Cheese Pepper Sticks: {{order.jalapeno_cheese_pepper_sticks}} </li> {% endif %}
+                    {% if order.jalapeno_pepper_sticks %}<li> Jalapeno Cheese Pepper Sticks: {{order.jalapeno_pepper_sticks}} </li> {% endif %}
                     {% if order.hunter_twiggs %}<li> Hunter Twiggs: {{order.hunter_twiggs}} </li> {% endif %}
                     {% if order.honey_bbq_pepper_sticks %}<li> BBQ Pepper Sticks: {{order.honey_bbq_pepper_sticks}} </li> {% endif %}
                     {% if order.smoked_brats %}<li> Brats: {{order.smoked_brats}} </li> {% endif %}
@@ -153,12 +171,5 @@
 {% endblock %}
 
 {% block footer %}
-<div class="container">
-    {% if form %}
-        {% include "orders/process_form.html" %}
-    {% endif %} 
-    {% if outform %}
-        {% include "orders/checkout_form.html" %}
-    {% endif %}    
-</div> 
+
 {% endblock %}

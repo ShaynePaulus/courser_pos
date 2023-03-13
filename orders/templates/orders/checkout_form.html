@@ -6,17 +6,22 @@
             {% csrf_token %}
             {{ outform.errors }}
             <div class="row">
-                <div class='col-sm mt-2'></div>
-                <div class='col-sm mt-2'></div>
-                <div class='col-sm mt-2'>
-                    {{ outform.order_gone|as_crispy_field }}
-                    {{ outform.sausage_gone|as_crispy_field }}
+                <div class='col-lg-6 mt-2'>
+                    <p class="h3">Freezer #: <span class="font-weight-bold">{% if order.freezer %}{{order.freezer}} {% endif %}</span></p>
+                    <p class="h3">Bag #: <span class="font-weight-bold">{% if order.bag %}{{order.bag}} {% endif %}</span></p>
+                    {% if order.smoked_lbs or order.jerky_lbs or order.smoked_ham %}
+                        <p class="h3">Sausage Picked up: <span class="font-weight-bold">{{order.sausage_date}}</span></p>
+                    {% endif %}
                 </div>
-                <div class='col-sm mt-2'>
+                <div class='col-lg-3 mt-2'>
                     {% if order.smoked_lbs or order.jerky_lbs or order.smoked_ham %}
                         {{ outform.sausage_paid|as_crispy_field }}
-                    {% endif %}
+                        {{ outform.sausage_gone|as_crispy_field }}
+                    {% endif %}                    
+                </div>
+                <div class='col-lg-3 mt-2'>
                     {{ outform.process_paid|as_crispy_field }}
+                    {{ outform.order_gone|as_crispy_field }}
                     {{ outform.payment_style|as_crispy_field }}
                 </div>
 
