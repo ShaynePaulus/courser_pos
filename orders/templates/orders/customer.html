@@ -7,6 +7,7 @@
         <a href="{% url 'orders:customer_edit' customer.id %}"><button class="btn btn-primary margin10" type="button">Edit Customer</button></a>
     </div>
     {% if previous_orders %}
+    <div style="overflow-x:auto;">
         <table class="table table-striped ">
             <thead>
             <tr class="thead-light">
@@ -27,6 +28,7 @@
                 {% endfor %}
             </tbody>
         </table>
+    </div>
     {% else %}
         <p>There are no previous orders for {{ customer }}</p>
     {% endif %}

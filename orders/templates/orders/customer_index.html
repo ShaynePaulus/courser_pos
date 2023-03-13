@@ -6,6 +6,7 @@
         <a href="{% url 'orders:customer' %}"><button class="btn btn-primary margin10" type="button">New Customer</button></a>
     </div>
     {% if customer_list %}
+    <div style="overflow-x:auto;">
         <table class="table table-striped ">
             <thead>
             <tr class="thead-light">
@@ -26,6 +27,7 @@
                 {% endfor %}
             </tbody>
         </table>
+    </div>
     {% else %}
         <p>There are no customers in database that match</p>
     {% endif %}

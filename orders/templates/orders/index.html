@@ -5,27 +5,29 @@
     <div>
         <a href="{% url 'orders:customer' %}"><button class="btn btn-primary margin10" type="button">Start Order</button></a>
     </div>
-    {% if order_list %}    
-        <table class="table table-striped ">
-            <thead>
-            <tr class="thead-light">
-                <th scope="col">Order #</th>
-                <th scope="col">Customer</th>
-                <th scope="col">Processing Paid</th>
-                <th scope="col"></th>
-            </tr>
-            </thead>
-            <tbody>
-                {% for order in order_list %}
-                <tr>
-                    <th scope="row">{{ order.id }}</th>
-                    <td>{{ order.customer }}</td>
-                    <td>{{ order.process_paid }}</td>
-                    <td class="d-flex justify-content-end"><a href="{% url 'orders:view_order' order.id %}"><button class="btn btn-primary btn-sm">View Order</button></a></td>
+    {% if order_list %}
+        <div style="overflow-x:auto;">
+            <table class="table table-striped ">
+                <thead>
+                <tr class="thead-light">
+                    <th scope="col">Order #</th>
+                    <th scope="col">Customer</th>
+                    <th scope="col">Processing Paid</th>
+                    <th scope="col"></th>
                 </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {% for order in order_list %}
+                    <tr>
+                        <th scope="row">{{ order.id }}</th>
+                        <td>{{ order.customer }}</td>
+                        <td>{{ order.process_paid }}</td>
+                        <td class="d-flex justify-content-end"><a href="{% url 'orders:view_order' order.id %}"><button class="btn btn-primary btn-sm">View Order</button></a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>  
     {% else %}
         <h4>No orders in the database that match</h4>
     {% endif %}
