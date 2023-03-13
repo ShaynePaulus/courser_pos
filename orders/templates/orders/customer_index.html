@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Customers: </h1>
+    <div>
+        <a href="{% url 'orders:customer' %}"><button class="btn btn-primary margin10" type="button">New Customer</button></a>
+    </div>
+    {% if customer_list %}
+        <table class="table table-striped ">
+            <thead>
+            <tr class="thead-light">
+                <th scope="col">Customer #</th>
+                <th scope="col">Customer</th>
+                <th scope="col">Phone #</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for customer in customer_list %}
+                <tr>
+                    <th scope="row">{{ customer.id }}</th>
+                    <td>{{ customer }}</td>
+                    <td>{{ customer.phone }}</td>
+                    <td class="d-flex justify-content-end"><a href="{% url 'orders:customer_view' customer.id %}"><button class="btn btn-primary margin10" type="button">View Customer</button></a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>There are no customers in database that match</p>
+    {% endif %}
+{% endblock %}

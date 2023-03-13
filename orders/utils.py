@@ -31,6 +31,7 @@ def ordercalc(order):
     SBLB = 4
 
     #calculate lbs
+    order.smoked_ham = int(order.smoked_ham or 0)
     order.smoked_lbs = ((SSLB *
                             (int(order.original_summer_sausage or 0)+
                             int(order.cheese_summer_sausage or 0)+

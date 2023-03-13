@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Orders</h1>
+    <h1>Orders: {{ key }} </h1>
     <div>
         <a href="{% url 'orders:customer' %}"><button class="btn btn-primary margin10" type="button">Start Order</button></a>
     </div>
@@ -27,6 +27,16 @@
             </tbody>
         </table>
     {% else %}
-        <p>There are no orders in the database</p>
+        <h4>No orders in the database that match</h4>
     {% endif %}
 {% endblock %}
+
+    {% block footer %}
+    {% if sausagebutton %}
+    <div class="container">
+        <h3>WARNING: Only export on sausage computer</h3>
+        <a href="{% url 'orders:export' %}"><button class="btn btn-primary margin10" type="button">Export Sausage Order</button></a>
+    </div>
+    {% endif %}
+    {% endblock %}
+

@@ -29,24 +29,29 @@ nav{
 nav ul{
     margin: 0;
     padding: 10px;
+    font-weight: bold;
+    font-size: medium;
 }
 
 nav ul li{
     display: inline-block;
     list-style-type: none;
+    
 }
 
 nav > ul > li > a{
-    color: #aaa;
+    color: #ccc;
     display: block;
     line-height: 2em;
     padding: 0.5em 1em;
     text-decoration: none;
+    
 }
 
 nav > ul > li > a:hover{
     color: orange;
     text-decoration: none;
+    
 }
 
 .logo-img{
@@ -73,12 +78,26 @@ nav > ul > li > a:hover{
     outline: 0;
     -webkit-box-shadow: none;
     margin: 0 0 5px 0;
-    width: 150px;
+    min-width: 150px;
 }
 
 .btn-primary:hover, .btn-primary:visited{
     background: orange;
     border-color: orange;
+}
+
+.btn-secondary, .btn-secondary:focus, btn-secondary:active{
+    background:orange;
+    border-color:orange;
+    box-shadow: none;
+    outline: 0;
+    -webkit-box-shadow: none;
+    margin: 0 0 5px 0;
+}
+
+.btn-secondary:hover, .btn-secondary:visited{
+    color: orange;
+    background-color: #fff;
 }
 
 a:hover{
@@ -97,7 +116,6 @@ hr {
     /* Set the hr color */
     color: #999; /* old IE */
     background-color: #999; /* Modern Browsers */
-    margin-bottom: 60px;
 }
 
 footer{

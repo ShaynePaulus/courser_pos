@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 class Customer(models.Model):
-    first = models.CharField(max_length=50, blank=True)
+    first = models.CharField(max_length=50)
     last = models.CharField(max_length=50, blank=True)
     phone = models.CharField(max_length=15)
 
@@ -24,10 +24,10 @@ class Order(models.Model):
     BULK_CHOICES = [('3', '3 lbs'), ('6', '6 lbs'), ('9', '9 lbs'), ('All', 'All')]
     
     #process info
-    sausage_out = models.BooleanField(blank=True, null=True)
-    bulk_out = models.BooleanField(blank=True, null=True)
-    ham_out = models.BooleanField(blank=True, null=True)
-    jerky_out = models.BooleanField(blank=True, null=True)
+    sausage_out = models.BooleanField(default= False, blank=True, null=True)
+    bulk_out = models.BooleanField(default= False, blank=True, null=True)
+    ham_out = models.BooleanField(default= False, blank=True, null=True)
+    jerky_out = models.BooleanField(default= False, blank=True, null=True)
 
     freezer = models.IntegerField(null=True)
     bag = models.IntegerField(null=True)
@@ -36,6 +36,7 @@ class Order(models.Model):
     sausage_ordered = models.BooleanField(blank=True, null=True)
 
     #checkout info
+    #can delete order_gone
     order_gone = models.BooleanField(default=False, blank=True, null=True)
     sausage_gone = models.BooleanField(default=False, blank=True, null=True)
     process_paid = models.BooleanField(default=False, null=True)

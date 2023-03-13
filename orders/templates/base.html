@@ -32,11 +32,12 @@
         <a href="{% url 'orders:index' %}"><img class="logo-img" src="http://courserdeerprocessing.com/wp-content/uploads/2016/07/logo-header2-1.png" width="130" ALT="align box" ALIGN=CENTER></a>
         <nav>
             <ul>
-                <li><a href="{% url 'orders:index' %}">All Orders</a></li>
-                <li><a href="#">Finished Orders</a></li>
-                <li><a href="#">Unfinished Orders</a></li>
-                <li><a href="#">Sausage</a></li>
-                <li><a href="{% url 'orders:customer' %}">New Order</a></li>
+                <li><a href="{% url 'orders:orders' %}">Orders</a></li>
+                <li><a href="{% url 'orders:customers' %}">Customers</a></li>
+                <li><a href="{% url 'orders:orders_unprocessed' %}">Process</a></li>
+                <li><a href="{% url 'orders:orders_processed' %}">Check Out</a></li>
+                <li><a href="{% url 'orders:sausage' %}">Sausage</a></li>
+                <li><a href="{% url 'orders:customer' %}"><button style="padding: 1em" class="btn btn-secondary" type="button">Start Order</button></a></li>
             </ul>
         </nav>
       </div>

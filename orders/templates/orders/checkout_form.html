@@ -1,7 +1,7 @@
 {% load crispy_forms_tags %}
 {% block content %}
     {% if order %}
-    <h2 class="text-center mt-5">Checkout Order</h2><hr>
+    <h2 class="text-center mt-5">Checkout Order# {{ order.id }}</h2><hr>
         <form action="" method="POST"> 
             {% csrf_token %}
             {{ outform.errors }}
@@ -9,6 +9,7 @@
                 <div class='col-lg-6 mt-2'>
                     <p class="h3">Freezer #: <span class="font-weight-bold">{% if order.freezer %}{{order.freezer}} {% endif %}</span></p>
                     <p class="h3">Bag #: <span class="font-weight-bold">{% if order.bag %}{{order.bag}} {% endif %}</span></p>
+                    <p class="h3">Order Picked up: <span class="font-weight-bold">{{order.checkout_date}}</span></p>
                     {% if order.smoked_lbs or order.jerky_lbs or order.smoked_ham %}
                         <p class="h3">Sausage Picked up: <span class="font-weight-bold">{{order.sausage_date}}</span></p>
                     {% endif %}

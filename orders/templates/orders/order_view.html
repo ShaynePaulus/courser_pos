@@ -2,6 +2,9 @@
 {% block navbar %}
 <div class="container">
 <div style="margin: 20px 0 20px 0;" class="button-group-right button-group">
+    {% if form or outform %}
+        <div class="buttons "><a href="{% url 'orders:view_order' order.id %}"><button class="btn btn-primary" type="button">Cancel</button></a></div>
+    {% endif %}
         <div class="buttons "><a href="{% url 'orders:edit_order' order.id %}"><button class="btn btn-primary" type="button">Edit Order</button></a></div>
         <div class="buttons "><a href="{% url 'orders:process_order' order.id %}"><button class="btn btn-primary" type="button">Process Order</button></a></div>
         <div class="buttons "><a href="{% url 'orders:checkout_order' order.id %}"><button class="btn btn-primary" type="button">Check-Out Order</button></a></div>
@@ -22,8 +25,6 @@
 </div>
     {% if order %}
     <div style="margin: 20px 0 20px 0;"><h1 class="text-center">
-        {% if form %}Process:{% endif %} 
-        {% if outform %}Checkout:{% endif %} 
         Order# {{ order.id }}</h1>
     </div>
     
@@ -34,10 +35,11 @@
 
         </div>
         <div class="text-center col-lg-3 col-sm-3">
-            <p class="h3 ">{{order.checkin_date}} <!--{{order.checkin_time}}--> </p>
+            <p class="h3 ">Tag #: {{order.tag_number}} </p>
+            
         </div>
         <div class="text-center col-lg-4 col-sm-3">
-            <p class="h3 ">Tag #: {{order.tag_number}} </p>
+            <p class="h3 ">{{order.checkin_date}} <!--{{order.checkin_time}}--> </p>
         </div>
         
         <div class="col-lg-2 col-sm-3">
@@ -48,23 +50,22 @@
         
         
     </div>
-    {% if order.checkout_date or order.sausage_date %}
+    {% if order.checkout_date %}
         <div class="row">
-            <div class="col-sm">
+            <div class="col-lg-3">
                 <p class="h3">Order Picked Up:</p>
             </div>
-            <div class="col-sm">
-                <p class="h3">{{order.sausage_date}}</p>
+            <div class="col-lg-3">
+                <p class="h3">{{order.checkout_date}}</p>
             </div>
             {% if order.sausage_date %}
-            <div class="col-sm">
+            <div class="col-lg-3">
                 <p class="h3">Sausage Picked Up:</p>
             </div>
-            <div class="col-sm">
+            <div class="col-lg-3">
                 <p class="h3 text-right">{{order.sausage_date}}</p>
             </div>
-            {% endif %}
-        
+            {% endif %}       
         </div>
     {% endif %}
     
@@ -93,7 +94,7 @@
     <div class="row">
         <div class="col-sm">
             {% if order.smoked_lbs %}
-            <h4>Sausage Out: {{order.sausage_out}}</h4>
+            <h4>Sausage Out: {{order.sausage_out|yesno:"Yes,No,Unknown"}}</h4>
                 <ul>
                     {% if order.original_summer_sausage %}<li> Original Summer Sausage: {{order.original_summer_sausage}} </li> {% endif %}
                     {% if order.cheese_summer_sausage %}<li> Cheese Summer Sausage: {{order.cheese_summer_sausage}} </li> {% endif %}
@@ -110,7 +111,7 @@
         </div>
         <div class="col-sm">
             {% if order.jerky_lbs %}
-            <h4>Jerky Out: {{order.jerky_out}}</h4>
+            <h4>Jerky Out: {{order.jerky_out|yesno:"Yes,No,Unknown"}}</h4>
                 <ul>
                     {% if order.jerky %}<li> Jerky: {{order.jerky}} </li> {% endif %}
                     {% if order.jerky_sweet_and_spicy %}<li> Jerky Sweet & Spicy: {{order.jerky_sweet_and_spicy}} </li> {% endif %}                
@@ -119,7 +120,7 @@
         </div>
         <div class="col-sm">
             {% if order.smoked_ham %}
-            <h4>Ham Out: {{order.ham_out}}</h4>
+            <h4>Ham Out: {{order.ham_out|yesno:"Yes,No,Unknown"}}</h4>
                 <ul>
                     {% if order.smoked_ham %}<li> Smoked Ham: {{order.smoked_ham}}</li> {% endif %}
                 </ul>
@@ -127,7 +128,7 @@
         </div>
         <div class="col-sm">
             {% if order.bulk_lbs %}
-            <h4>Bulk Out: {{order.bulk_out}}</h4>
+            <h4>Bulk Out: {{order.bulk_out|yesno:"Yes,No,Unknown"}}</h4>
                 <ul>
                     {% if order.maple_breakfast %}<li> Maple Breakfast: {{order.maple_breakfast}}</li> {% endif %}
                     {% if order.spicy_breakfast %}<li> Spicy Breakfast: {{order.spicy_breakfast}}</li> {% endif %}
@@ -147,13 +148,14 @@
             <p class="h3">Bag #: <span class="font-weight-bold">{% if order.bag %}{{order.bag}} {% endif %}</span></p>
         </div>
         <div class="col-sm">
-            <p class="h3">Process Paid: <span class="font-weight-bold">{% if order.process_paid %}{{order.process_paid}} {% endif %}</span></p>
-            <p class="h3">Sausage Paid: <span class="font-weight-bold">{% if order.sausage_paid %}{{order.sausage_paid}} {% endif %}</span></p>    
+            <p class="h3">Process Paid: <span class="font-weight-bold">{% if order.process_paid %}{{order.process_paid|yesno:"Yes,No,Unknown"}} {% endif %}</span></p>
+            <p class="h3">Sausage Paid: <span class="font-weight-bold">{% if order.sausage_paid %}{{order.sausage_paid|yesno:"Yes,No,Unknown"}} {% endif %}</span></p>    
         </div>  
         <div class="col-sm">
             <p class="h3">Process Cost: <span class="float-right font-weight-bold">&nbsp;${{order.process_cost|floatformat:2}}</span></p>
             <p class="h3">Sausage Cost: <span class="float-right font-weight-bold">{% if order.sausage_cost %}${{order.sausage_cost|floatformat:2}} {% endif %}</span></p>
             {% if order.hide_cost %}<p class="h3">Hide Cost: <span class="float-right font-weight-bold">${{order.hide_cost|floatformat:2}} {% endif %}</span></p>
+            <hr>
         </div>  
     </div>
     <br>
