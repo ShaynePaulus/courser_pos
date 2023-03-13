@@ -29,19 +29,25 @@ class AllOrders(LoginRequiredMixin, View):
 
 class ProcessedOrders(LoginRequiredMixin, View):
     def get(self, request):
-        orders = Order.objects.filter(checkout_date= None).exclude(process_date= None).order_by('-id')
-        context = {'order_list':orders, 'key': 'Checkout'}
+        aorders = Order.objects.filter(checkout_date= None).exclude(process_date= None).order_by('-id')
+        sorders = Order.objects.filter(sausage_date= None).exclude(process_date= None).exclude(sausage_cost=0).order_by('-id')
+        orders = aorders | sorders
+        n = len(orders)
+        key = 'Checkout (' + str(n) + ')'
+        context = {'order_list':orders, 'key': key}
         return render(request, 'orders/index.html', context)
 
 class UnprocessedOrders(LoginRequiredMixin, View):
     def get(self, request):
         orders = Order.objects.filter(process_date= None).order_by('-id')
-        context= {'order_list':orders, 'key': 'Unprocessed'}
+        n = len(orders)
+        key = 'Unprocessed (' + str(n) + ')'
+        context= {'order_list':orders, 'key': key}
         return render(request, 'orders/index.html', context)
 
 class Sausage(LoginRequiredMixin, View):
     def get(self, request):
-        orders = Order.objects.filter(sausage_date= None).exclude(process_date= None).order_by('-id')
+        orders = Order.objects.filter(~Q(smoked_lbs=0)|~Q(jerky_lbs=0)|~Q(smoked_ham=0)).exclude(sausage_ordered=True).order_by('id')
         context = {'order_list':orders, 'key': 'Sausage','sausagebutton':'1'}
         return render(request, 'orders/index.html', context)
 
@@ -180,7 +186,7 @@ class ProcessOrder(LoginRequiredMixin, View):
         if order.bag != None:
             order.process_date = datetime.now()
         order.save()
-        return redirect(reverse_lazy('orders:index'))
+        return redirect(reverse_lazy('orders:orders_unprocessed'))
 
 class CheckoutOrder(LoginRequiredMixin, View):
     def get(self, request, pk):
@@ -213,7 +219,7 @@ class CheckoutOrder(LoginRequiredMixin, View):
         else:
             order.sausage_date = None
         order.save()
-        return redirect(reverse_lazy('orders:index'))
+        return redirect(reverse_lazy('orders:orders_processed'))
 
 class Search(LoginRequiredMixin, View):
     def get(self, request):
